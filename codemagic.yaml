@@ -1,44 +1,15 @@
-# Codemagic build configuration for My Editor App
-# ==============================================
-# This file defines how Codemagic will fetch, build, and package your app.
-# It supports Android, iOS, and web (optional). 
-# You can add secrets in Codemagic UI for secure keys.
-
 workflows:
   my_editor_build:
     name: My Editor App - Android Build
     max_build_duration: 60
     environment:
       flutter: stable
-      vars:
-        PACKAGE_NAME: "com.onewempye.myeditor"
-      android_signing:
-        keystore_reference: my_editor_keystore
+
     scripts:
       - name: Get dependencies
-        script: |
-          flutter pub get
-      - name: Analyze code
-        script: |
-          flutter analyze
-      - name: Run tests
-        script: |
-          flutter test || echo "No tests found, continuing build"
-      - name: Build release APK
-        script: |
-          flutter build apk --release
-      - name: Move APK to output
-        script: |
-          mkdir -p build_output
-          cp build/app/outputs/flutter-apk/app-release.apk build_output/MyEditorApp.apk
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --release
+
     artifacts:
-      - build_output/MyEditorApp.apk
-    publishing:
-      email:
-        recipients:
-          - onewempye00@gmail.com
-          - speedyandmikey1011@gmail.com
-          - siya.miklehlongwane303@gmail.com
-        notify:
-          success: true
-          failure: true
+      - build/app/outputs/flutter-apk/app-release.apk
